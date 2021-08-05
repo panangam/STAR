@@ -57,16 +57,16 @@ class STAR(nn.Module):
         self.num_betas = num_betas
 
         # Model sparse joints regressor, regresses joints location from a mesh
-        self.register_buffer('J_regressor', torch.cuda.FloatTensor(J_regressor))
+        self.register_buffer('J_regressor', torch.tensor(J_regressor))
 
         # Model skinning weights
-        self.register_buffer('weights', torch.cuda.FloatTensor(star_model['weights']))
+        self.register_buffer('weights', torch.tensor(star_model['weights']))
         # Model pose corrective blend shapes
-        self.register_buffer('posedirs', torch.cuda.FloatTensor(star_model['posedirs'].reshape((-1,93))))
+        self.register_buffer('posedirs', torch.tensor(star_model['posedirs'].reshape((-1,93))))
         # Mean Shape
-        self.register_buffer('v_template', torch.cuda.FloatTensor(star_model['v_template']))
+        self.register_buffer('v_template', torch.tensor(star_model['v_template']))
         # Shape corrective blend shapes
-        self.register_buffer('shapedirs', torch.cuda.FloatTensor(np.array(star_model['shapedirs'][:,:,:num_betas])))
+        self.register_buffer('shapedirs', torch.tensor(np.array(star_model['shapedirs'][:,:,:num_betas])))
         # Mesh traingles
         self.register_buffer('faces', torch.from_numpy(star_model['f'].astype(np.int64)))
         self.f = star_model['f']
@@ -121,7 +121,7 @@ class STAR(nn.Module):
         J_ = J.clone()
         J_[:, 1:, :] = J[:, 1:, :] - J[:, self.parent, :]
         G_ = torch.cat([R, J_[:, :, :, None]], dim=-1)
-        pad_row = torch.FloatTensor([0, 0, 0, 1]).to(device).view(1, 1, 1, 4).expand(batch_size, 24, -1, -1)
+        pad_row = torch.tensor([0, 0, 0, 1]).to(device).view(1, 1, 1, 4).expand(batch_size, 24, -1, -1)
         G_ = torch.cat([G_, pad_row], dim=2)
         G = [G_[:, 0].clone()]
         for i in range(1, 24):

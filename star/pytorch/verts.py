@@ -23,7 +23,7 @@ def verts_core():
     J_ = J.clone()
     J_[:, 1:, :] = J[:, 1:, :] - J[:, self.parent, :]
     G_ = torch.cat([R, J_[:, :, :, None]], dim=-1)
-    pad_row = torch.FloatTensor([0, 0, 0, 1]).to(device).view(1, 1, 1, 4).expand(batch_size, 24, -1, -1)
+    pad_row = torch.tensor([0, 0, 0, 1]).to(device).view(1, 1, 1, 4).expand(batch_size, 24, -1, -1)
     G_ = torch.cat([G_, pad_row], dim=2)
     G = [G_[:, 0].clone()]
     for i in range(1, 24):

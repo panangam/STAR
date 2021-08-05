@@ -20,14 +20,16 @@
 # Ahmed A. A. Osman
 
 import os
+from pathlib import Path
+
 path_male_star = ''
 path_female_star = ''
 path_neutral_star = ''
 
-data_type = 'float32'
+data_type = 'float64'
 
-if data_type not in ['float16','float32','float64']:
-    raise RuntimeError('Invalid data type %s'%(data_type))
+# if data_type not in ['float16','float32','float64']:
+#     raise RuntimeError('Invalid data type %s'%(data_type))
 
 class meta(object):
     pass 
@@ -38,3 +40,14 @@ cfg.data_type = data_type
 cfg.path_male_star    = path_male_star
 cfg.path_female_star  = path_female_star
 cfg.path_neutral_star = path_neutral_star
+
+
+def set_model_path(path):
+    path = Path(path)
+    path_male_star = path/'male/model.npz'
+    path_female_star = path/'female/model.npz'
+    path_neutral_star = path/'neutral/model.npz'
+
+    cfg.path_male_star    = path_male_star
+    cfg.path_female_star  = path_female_star
+    cfg.path_neutral_star = path_neutral_star
